@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <title>店舗｜検索、結果</title>
 <link rel="stylesheet" th:href="@{/css/style.css}">
+<style>
+	tr:hover {
+		background-color: #f0f0f0;
+		cursor:pointer;
+	}
+	.selected {
+		background-color: lightblue;
+	}
+</style>
 </head>
 <body>
 
@@ -18,35 +27,82 @@
 <div th:if="${restaurantList} != null">
 	<h2>レストラン一覧</h2>
 	<table class="restaurant-list">
-		<tr>
-			<th colspan="2">レビュー</th>
-			<th>店舗ID</th>
-			<th>店舗名</th>
-			<th>キャッチプレーズ</th>
-			<th>評価（平均）</th>
-		</tr>
-		<tr th:each="r : ${restaurantList}">
-			<td>
-				<form th:action="@{/search-review}" method="POST">
-					<input type="hidden" name="restaurantId" th:value="${r.restaurantId}">
-					<input type="hidden" name="restaurantName" th:value="${r.restaurantName}">
-					<input type="submit" value="一覧" class="tbtn">
-				</form>
-			</td><td>
-				<form th:action="@{/show-review-form}" method="POST">
-					<input type="hidden" name="restaurantId" th:value="${r.restaurantId}">
-					<input type="hidden" name="restaurantName" th:value="${r.restaurantName}">
-					<input type="submit" value="登録" class="tbtn">
-				</form>
-			</td>
-			<td th:text="${r.restaurantId}"></td>
-			<td th:text="${r.restaurantName}"></td>
-			<td th:text="${r.catchPhrase}"></td>
-			<td th:text="${r.formatAverageRating()}"></td>
-		</tr>
+		<thead>
+			<tr>
+				<th colspan="2">レビュー</th>
+				<th>店舗ID</th>
+				<th>店舗名</th>
+				<th>キャッチプレーズ</th>
+				<th>評価（平均）</th>
+			</tr>
+		</thead>
+		<tbody id="dataTable">
+			<tr th:each="r : ${restaurantList}">
+				<td>
+					<form th:action="@{/search-review}" method="POST">
+						<input type="hidden" name="restaurantId" th:value="${r.restaurantId}">
+						<input type="hidden" name="restaurantName" th:value="${r.restaurantName}">
+						<input type="submit" value="一覧" class="tbtn">
+					</form>
+				</td><td>
+					<form th:action="@{/show-review-form}" method="POST">
+						<input type="hidden" name="restaurantId" th:value="${r.restaurantId}">
+						<input type="hidden" name="restaurantName" th:value="${r.restaurantName}">
+						<input type="submit" value="登録" class="tbtn">
+					</form>
+				</td>
+				<td class="copiable" th:text="${r.restaurantId}" data-raw-id="${r.restaurantId}"></td>
+				<td class="copiable" th:text="${r.restaurantName}"></td>
+				<td class="copiable" th:text="${r.catchPhrase}"></td>
+				<td class="copiable" th:text="${r.formatAverageRating()}"></td>
+			</tr>
+		</tbody>
 	</table>
 	
 </div>
+
+<script>
+	const dataTable = document.getElementById('dataTable');
+	let selectedRow = null;
+	
+	dataTable.addEventListener('click', (e) => {
+		const targetRow = event.target.closest('tr');
+		if (targetRow) {
+			if (selectedRow) {
+				selectedRow.classList.remove('selected');
+			}
+			selectedRow = targetRow;
+			selectedRow.classList.add('selected');
+		}
+	})
+	
+	document.addEventListener('keydown', (e) => {
+		if ((e.ctrlKey |e.metaKey) && e.key == 'c' && selectedRow) {
+			const rowData = Array.from(selectedRow.querySelectorAll('td'))
+				.map(td => {
+				 	if (td.classList.contains('copiable'))
+						return td.textContent;
+					else
+						return '';
+					})
+				.join('¥t');
+			
+			console.log('copy data : ' + rowData);
+			alert('行からコピーしたデータ　：' + rowData);
+			
+			copyToClipboard(rowData);
+			
+		}
+	})
+	
+	function copyToClipboard(text) {
+		if (!navigator.clipboard) {
+			fallbackCopyTextToClipboard(text);
+			return;
+		}
+		navigator.clipboard.writeText(text);
+	}
+</script>
 
 </body>
 </html>
