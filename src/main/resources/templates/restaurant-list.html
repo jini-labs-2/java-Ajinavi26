@@ -77,41 +77,8 @@ drag and drop test
   <div id="file-list"></div>
 </div>
 
-<script>
-  const dropArea = document.getElementById('drop-area');
-  const fileInput = document.getElementById('fileInput');
-  const fileList = document.getElementById('file-list');
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  function showFileInfo(file) {
-    fileList.textContent = `ファイル名: ${file.name}`;
-  }
-
-  // 드래그 오버: 필수로 preventDefault 해야 드롭 가능
-  dropArea.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    dropArea.classList.add('hover');
-  });
-
-  dropArea.addEventListener('dragleave', () => {
-    dropArea.classList.remove('hover');
-  });
-
-  dropArea.addEventListener('drop', (e) => {
-    e.preventDefault();
-    dropArea.classList.remove('hover');
-
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-      showFileInfo(files[0]);
-    }
-  });
-
-  fileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      showFileInfo(file);
-    }
-  });
-</script>
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>
