@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" th:href="@{/css/style.css}">
+<title>エラー表示</title>
+</head>
+<body>
+	<p class="error-msg">エラーが発生しました</p>
+	<p class="error-msg" th:text="${status} + ' ' + ${error}"></p>
+	<br>
+	<a th:href="@{/top}">トップページへ</a>
+
+</body>
+</html>

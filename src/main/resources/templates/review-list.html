@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" th:href="@{/css/style.css}">
+<title>店舗レビュー</title>
+</head>
+<body>
+	<h2>レビュー一覧</h2>
+	<div th:object="${reviewSearchForm}">
+		店舗<br>
+		<p th:text="*{restaurantId} + ' ' + *{restaurantName}"></p>
+	</div>
+	<br>
+	<div th:if="${reviewList} == null">
+		レビューが存在しません。
+	</div> 
+	<div th:if="${reviewList} != null">
+		<table class="review-list">
+			<tr>
+				<th >レビュー</th>
+				<th>ID</th>
+				<th>ユーザー</th>
+				<th>来店日</th>
+				<th>評価</th>
+				<th>コメント</th>
+			</tr>
+			<tr th:each="r : ${reviewList}">
+				<td>
+				<form th:action="@{/show-edit-form}" method="POST">
+					<input type="hidden" name="reviewId"       th:value="${r.reviewId}">
+					<input type="hidden" name="restaurantId"   th:value="${reviewSearchForm.restaurantId}">
+					<input type="hidden" name="restaurantName" th:value="${reviewSearchForm.restaurantName}">
+					<input type="hidden" name="userId"         th:value="${r.userId}">
+					<input type="hidden" name="visitDate"      th:value="${r.visitDate}">
+					<input type="hidden" name="rating"         th:value="${r.rating}">
+					<input type="hidden" name="comment"        th:value="${r.comment}">
+					<input type="submit" value="編集" class="tbtn">
+				</form>
+				</td>
+				<td>
+				<form th:action="@{/remove-review}" method="POST">
+					<input type="hidden" name="reviewId"       th:value="${r.reviewId}">
+					<input type="hidden" name="restaurantId"   th:value="${reviewSearchForm.restaurantId}">
+					<input type="hidden" name="restaurantName" th:value="${reviewSearchForm.restaurantName}">
+					<input type="hidden" name="userId"         th:value="${r.userId}">
+					<input type="hidden" name="visitDate"      th:value="${r.visitDate}">
+					<input type="hidden" name="rating"         th:value="${r.rating}">
+					<input type="hidden" name="comment"        th:value="${r.comment}">
+					<input type="submit" value="削除" class="tbtn">
+				</form>
+				</td>
+				<td th:text="*{r.reviewId}"></td>
+				<td th:text="*{r.userId}"></td>
+				<td th:text="*{r.visitDate}"></td>
+				<td th:text="*{r.rating}"></td>
+				<td th:text="*{r.comment}"></td>
+			</tr>
+		</table>
+	</div> 
+	
+	<a th:href="@{/top}">トップページへ</a>
+</body>
+</html>

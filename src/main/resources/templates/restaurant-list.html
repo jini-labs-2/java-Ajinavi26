@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>店舗｜検索、結果</title>
+<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<h2>レストラン検索</h2>
+<form th:action="@{/restaurant-search}" method="POST" th:object="${restaurantSearchForm}">
+	<label>店舗名</label><br>
+	<input type="text" th:field="*{restaurantName}"><br>
+	<br>
+	<input type="submit" value="検索" class="btn">
+</form>
+
+<div th:if="${restaurantList} != null">
+	<h2>レストラン一覧</h2>
+	<table class="restaurant-list">
+		<tr>
+			<th colspan="2">レビュー</th>
+			<th>店舗ID</th>
+			<th>店舗名</th>
+			<th>キャッチプレーズ</th>
+			<th>評価（平均）</th>
+		</tr>
+		<tr th:each="r : ${restaurantList}">
+			<td>
+				<form th:action="@{/search-review}" method="POST">
+					<input type="hidden" name="restaurantId" th:value="${r.restaurantId}">
+					<input type="hidden" name="restaurantName" th:value="${r.restaurantName}">
+					<input type="submit" value="一覧" class="tbtn">
+				</form>
+			</td><td>
+				<form th:action="@{/show-review-form}" method="POST">
+					<input type="hidden" name="restaurantId" th:value="${r.restaurantId}">
+					<input type="hidden" name="restaurantName" th:value="${r.restaurantName}">
+					<input type="submit" value="登録" class="tbtn">
+				</form>
+			</td>
+			<td th:text="${r.restaurantId}"></td>
+			<td th:text="${r.restaurantName}"></td>
+			<td th:text="${r.catchPhrase}"></td>
+			<td th:text="${r.formatAverageRating()}"></td>
+		</tr>
+	</table>
+	
+</div>
+
+</body>
+</html>

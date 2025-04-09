@@ -1,0 +1,63 @@
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>レビュー更新</title>
+<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+	<h2>レビュー更新</h2>
+	<form th:action="@{/edit-review}" method="POST"
+		th:object="${reviewEditForm}"
+		>
+		<label>ID</label><br>
+		<p th:text="*{reviewId}"></p>
+		<input type="hidden" th:field="*{reviewId}"><br>
+		<div th:if="${#fields.hasErrors('reviewId')}" th:errors="*{reviewId}" class="error-msg"></div>
+		
+		店舗ID<br>
+		<p th:text="*{restaurantId}
+		               + '　' + *{restaurantName}"></p>
+    	<input type="hidden" th:field="*{restaurantId}">
+    	<input type="hidden" th:field="*{restaurantName}">
+    	<div th:if="${#fields.hasErrors('restaurantId')}" th:errors="*{restaurantId}" class="error-msg"></div>
+		<br>
+		
+		<label>利用者ID</label><br>
+		<input type="text"  th:field="*{userId}"><br>
+		<div th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}" class="error-msg"></div>
+		
+		<label>来日日</label><br>
+		<input type="date"  th:field="*{visitDate}"><br>
+		<div th:if="${#fields.hasErrors('visitDate')}" th:errors="*{visitDate}" class="error-msg"></div>
+		
+		<label>評価（１〜５）</label><br>
+		<select th:field="*{rating}">
+			<option value="0">洗濯して下さい</option>
+			<option th:each="opt : ${#numbers.sequence(1,5)}"
+				th:value="${opt}"
+				th:text="${opt}"
+				th:selected="${opt == rating}"></option>
+		</select>
+<!--		<input type="text" th:field="*{rating}"><br>-->
+		<div th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}" class="error-msg"></div><br>
+		
+		<label>一言コメント</label><br>
+		<input type="text" th:field="*{comment}" class="comment"><br>
+		<div th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}" class="error-msg"></div>
+		
+		<input type="submit" value="更新" class="btn">
+
+	</form>
+	<br>
+	<form th:action="@{/search-review}" method="POST"
+		th:object="${reviewEditForm}">
+		<input type="hidden" th:field="*{restaurantId}">
+		<input type="hidden" th:field="*{restaurantName}">
+		<input type="submit" value="戻る" class="btn">
+	</form>
+	<br>
+	<a th:href="@{/top}">トップページに戻る</a>
+</body>
+</html>
