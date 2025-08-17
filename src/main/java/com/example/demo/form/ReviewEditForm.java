@@ -7,10 +7,15 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 
 @Data
 public class ReviewEditForm {
+	
+	private MultipartFile infile;
 
 	@NotNull(message="入力してください。")
 	@Min(value=1,  message="正の整数を入力してください。")
